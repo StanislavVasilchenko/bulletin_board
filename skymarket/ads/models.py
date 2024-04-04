@@ -9,6 +9,7 @@ class Ad(models.Model):
     price = models.PositiveIntegerField(verbose_name='price')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='ad_author')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='time_created')
+    image = models.ImageField(upload_to='ads/image/', verbose_name='image', blank=True, null=True)
 
     def __str__(self):
         return f'{self.title} - {self.author}'
