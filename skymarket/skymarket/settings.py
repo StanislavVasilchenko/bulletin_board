@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     'drf_yasg',
+    'rest_framework_simplejwt',
+
     "users",
     "ads",
     "redoc",
@@ -80,6 +82,9 @@ WSGI_APPLICATION = "skymarket.wsgi.application"
 
 # TODO здесь мы настраиваем аутентификацию и пагинацию
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 # TODO здесь мы настраиваем Djoser
 # DJOSER = {
