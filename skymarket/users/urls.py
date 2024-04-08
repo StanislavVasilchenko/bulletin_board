@@ -1,6 +1,8 @@
-from django.urls import path
+from django.urls import path, include
+from djoser.views import UserViewSet
+from rest_framework.routers import SimpleRouter
 
-from users.views import UserRegistrationAPIView
+# from users.views import UserRegistrationAPIView
 
 # from djoser.views import UserViewSet
 # from rest_framework.routers import SimpleRouter
@@ -12,6 +14,9 @@ from users.views import UserRegistrationAPIView
 
 app_name = 'users'
 
+users_router = SimpleRouter()
+users_router.register("users", UserViewSet, basename="users")
+
 urlpatterns = [
-    path('register/', UserRegistrationAPIView.as_view(), name='registration')
+    path("", include(users_router.urls)),
 ]
