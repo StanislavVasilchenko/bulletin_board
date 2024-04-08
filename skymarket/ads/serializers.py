@@ -12,9 +12,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class AdSerializer(serializers.ModelSerializer):
     # TODO сериалайзер для модели
+
     class Meta:
         model = Ad
-        fields = '__all__'
+        exclude = ['author', 'id']
 
 
 class AdDetailSerializer(serializers.ModelSerializer):
