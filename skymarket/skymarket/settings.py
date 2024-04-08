@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     'drf_yasg',
     'rest_framework_simplejwt',
+    'djoser',
 
     "users",
     "ads",
@@ -88,8 +89,12 @@ REST_FRAMEWORK = {
     )
 }
 # TODO здесь мы настраиваем Djoser
-# DJOSER = {
-# }
+DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.UserRegistrationSerializer'
+    },
+    'LOGIN_FIELD': 'email'
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
