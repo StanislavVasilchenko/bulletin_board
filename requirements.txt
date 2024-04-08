@@ -48,3 +48,4 @@ sqlparse
 tomli
 uritemplate
 urllib3
+djoser
