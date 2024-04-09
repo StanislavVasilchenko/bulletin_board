@@ -3,9 +3,10 @@ from ads.models import Ad, Comment
 from ads.serializers import AdSerializer, AdDetailSerializer, CommentSerializer
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from ads.permissions import IsAdsOwner, IsAdmin
+from ads.permissions import IsOwner, IsAdmin
 from rest_framework.response import Response
 
 
@@ -25,7 +26,7 @@ class AdViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'create', 'destroy']:
-            self.permission_classes = [IsAuthenticated, IsAdsOwner | IsAdmin]
+            self.permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
         elif self.action in ['list', 'retrieve']:
             self.permission_classes = [AllowAny]
             self.serializer_class = AdDetailSerializer
@@ -45,9 +46,27 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = AdPagination
 
     def perform_create(self, serializer):
         ad_id = self.kwargs['ad_id']
         ad = Ad.objects.get(id=ad_id)
         comment = serializer.save(author=self.request.user, ad=ad)
         comment.save()
+
+    def list(self, request, *args, **kwargs):
+
+        ad_pk = self.kwargs.get('ad_pk')
+        queryset = self.queryset.filter(ad=ad_pk)
+        serializer = self.get_serializer(queryset, many=True)
+        return self.get_paginated_response(self.paginate_queryset(serializer.data))
+
+    def get_permissions(self):
+        if self.action in ['update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
+        elif self.action in ['create', 'retrieve']:
+            self.permission_classes = [IsAuthenticated]
+        else:
+            self.permission_classes = [AllowAny]
+        return [permission() for permission in self.permission_classes]
+
