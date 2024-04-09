@@ -1,7 +1,8 @@
 from rest_framework import pagination, viewsets, status
-from ads.models import Ad
-from ads.serializers import AdSerializer, AdDetailSerializer
+from ads.models import Ad, Comment
+from ads.serializers import AdSerializer, AdDetailSerializer, CommentSerializer
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from ads.permissions import IsAdsOwner, IsAdmin
@@ -41,4 +42,12 @@ class AdViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    pass
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        ad_id = self.kwargs['ad_id']
+        ad = Ad.objects.get(id=ad_id)
+        comment = serializer.save(author=self.request.user, ad=ad)
+        comment.save()
