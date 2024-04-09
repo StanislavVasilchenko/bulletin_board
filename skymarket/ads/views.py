@@ -1,6 +1,6 @@
 from rest_framework import pagination, viewsets, status
 from ads.models import Ad
-from ads.serializers import AdSerializer
+from ads.serializers import AdSerializer, AdDetailSerializer
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
@@ -27,6 +27,7 @@ class AdViewSet(viewsets.ModelViewSet):
             self.permission_classes = [IsAuthenticated, IsAdsOwner | IsAdmin]
         elif self.action in ['list', 'retrieve']:
             self.permission_classes = [AllowAny]
+            self.serializer_class = AdDetailSerializer
         return [permission() for permission in self.permission_classes]
 
     @action(detail=False, methods=['get'])
