@@ -1,13 +1,19 @@
 from rest_framework import serializers
 
 from ads.models import Ad
+from ads.models import Comment
 
 
 # TODO Сериалайзеры. Предлагаем Вам такую структуру, однако вы вправе использовать свою
 
 class CommentSerializer(serializers.ModelSerializer):
     # TODO сериалайзер для модели
-    pass
+    ads = serializers.CharField(source='ad.title', read_only=True)
+    comment_author = serializers.CharField(source='author.first_name', read_only=True)
+
+    class Meta:
+        model = Comment
+        exclude = ['ad', 'author', 'id']
 
 
 class AdSerializer(serializers.ModelSerializer):
