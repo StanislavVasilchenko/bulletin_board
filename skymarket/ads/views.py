@@ -56,7 +56,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
 
-        ad_pk = self.kwargs.get('ad_pk')
+        ad_pk = self.kwargs.get('ad_id')
         queryset = self.queryset.filter(ad=ad_pk)
         serializer = self.get_serializer(queryset, many=True)
         return self.get_paginated_response(self.paginate_queryset(serializer.data))

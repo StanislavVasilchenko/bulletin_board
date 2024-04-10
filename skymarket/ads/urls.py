@@ -18,7 +18,6 @@ comment_router.register('comments', viewset=views.CommentViewSet, basename='comm
 
 urlpatterns = [
     path('ads/me/', AdViewSet.as_view({'get': 'get_me_ads'}), name='me_ads'),
-    path('ads/<int:ad_id>/', include(comment_router.urls), name='create-comment'),
-    path('api/ads/<int:ad_pk>/', include(comment_router.urls), name='get-ad-comments'),
+    path('ads/<int:ad_id>/', include(comment_router.urls)),
 ]
 urlpatterns += ad_router.urls
