@@ -2,8 +2,7 @@ from rest_framework import pagination, viewsets, status
 from ads.models import Ad, Comment
 from ads.serializers import AdSerializer, AdDetailSerializer, CommentSerializer
 from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from ads.permissions import IsOwner, IsAdmin
@@ -20,6 +19,8 @@ class AdViewSet(viewsets.ModelViewSet):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
     pagination_class = AdPagination
+    filter_backends = [SearchFilter]
+    search_fields = ['title']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -69,4 +70,3 @@ class CommentViewSet(viewsets.ModelViewSet):
         else:
             self.permission_classes = [AllowAny]
         return [permission() for permission in self.permission_classes]
-
