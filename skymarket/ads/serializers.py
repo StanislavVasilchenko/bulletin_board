@@ -9,11 +9,14 @@ from ads.models import Comment
 class CommentSerializer(serializers.ModelSerializer):
     # TODO сериалайзер для модели
     ads = serializers.CharField(source='ad.title', read_only=True)
-    comment_author = serializers.CharField(source='author.first_name', read_only=True)
+    author_first_name = serializers.CharField(source='author.first_name', read_only=True)
+    author_last_name = serializers.CharField(source='author.last_name', read_only=True)
+    ad_id = serializers.IntegerField(source='ad.id', read_only=True)
+    author_image = serializers.CharField(source='author.image', read_only=True)
 
     class Meta:
         model = Comment
-        exclude = ['ad', 'author', 'id']
+        exclude = ['ad', 'author']
 
 
 class AdSerializer(serializers.ModelSerializer):
