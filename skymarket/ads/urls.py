@@ -4,7 +4,7 @@ from rest_framework import routers
 from ads import views
 from ads.apps import SalesConfig
 
-from ads.views import AdViewSet, CommentViewSet
+from ads.views import AdViewSet
 
 # TODO настройка роутов для модели
 

@@ -8,7 +8,6 @@ from rest_framework.routers import SimpleRouter
 # from rest_framework.routers import SimpleRouter
 
 
-
 # TODO подключите UserViewSet из Djoser.views к нашим urls.py
 # TODO для этокого рекоммендуется использовать SimpleRouter
 
