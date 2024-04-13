@@ -33,10 +33,7 @@ class AdSerializer(serializers.ModelSerializer):
 
 class AdDetailSerializer(serializers.ModelSerializer):
     # TODO сериалайзер для модели
-    author = serializers.CharField(source='author.first_name',
-                                   read_only=True)
-    phone = serializers.CharField(source='author.phone', read_only=True)
 
     class Meta:
         model = Ad
-        exclude = ['id']
+        exclude = ['created_at', 'author']
