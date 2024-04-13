@@ -1,6 +1,6 @@
 from rest_framework import pagination, viewsets, status
 from ads.models import Ad, Comment
-from ads.serializers import AdSerializer, AdDetailSerializer, CommentSerializer
+from ads.serializers import AdSerializer, CommentSerializer, AdDetailSerializer
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -40,7 +40,7 @@ class AdViewSet(viewsets.ModelViewSet):
             serializer = AdSerializer(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response([{'message': 'Not logged in'}], status=status.HTTP_401_UNAUTHORIZED)
+            return Response([{'message': 'Not logged in service'}], status=status.HTTP_401_UNAUTHORIZED)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -70,3 +70,8 @@ class CommentViewSet(viewsets.ModelViewSet):
         else:
             self.permission_classes = [AllowAny]
         return [permission() for permission in self.permission_classes]
+
+    def get_queryset(self):
+        ad_pk = self.kwargs['ad_id']
+        queryset = self.queryset.filter(ad_id=ad_pk)
+        return queryset
