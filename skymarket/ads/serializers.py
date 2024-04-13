@@ -21,6 +21,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class AdSerializer(serializers.ModelSerializer):
     # TODO сериалайзер для модели
+    phone = serializers.CharField(source='author.phone', read_only=True)
+    author_first_name = serializers.CharField(source='author.first_name', read_only=True)
+    author_last_name = serializers.CharField(source='author.last_name', read_only=True)
+    author_id = serializers.IntegerField(source='author.id', read_only=True)
 
     class Meta:
         model = Ad
