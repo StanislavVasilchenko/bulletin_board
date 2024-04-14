@@ -42,6 +42,10 @@ CREATE DATABASE db_name
 ```
 pip install -r requirements.txt
 ```
+Применить миграции:
+```
+python skymarket/manage.py migrate
+```
 
 ### Запуск сервера
 Чтобы запустить сервер :
