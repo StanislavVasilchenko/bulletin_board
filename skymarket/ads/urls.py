@@ -6,8 +6,6 @@ from ads.apps import SalesConfig
 
 from ads.views import AdViewSet
 
-# TODO настройка роутов для модели
-
 app_name = SalesConfig.name
 
 ad_router = routers.DefaultRouter()

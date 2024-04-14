@@ -3,7 +3,14 @@ from django.db import models
 
 
 class Ad(models.Model):
-    # TODO добавьте поля модели здесь
+    """Модель объявдения:
+    - title: заголовок
+    - description: описание
+    - price: цена
+    - author: автор объявдения (создается автоматически)
+    - created_at: дата создания (создается автоматически)
+    - image: изображение (не обязательно)"""
+
     title = models.CharField(max_length=250, verbose_name='Title')
     description = models.TextField(verbose_name='description')
     price = models.PositiveIntegerField(verbose_name='price')
@@ -21,7 +28,11 @@ class Ad(models.Model):
 
 
 class Comment(models.Model):
-    # TODO добавьте поля модели здесь
+    """Модель комментария к объявлению
+    - text: тект комментария
+    - ad: объявление к которому написан комментарий (заполняется автоматически)
+    - created_at: дата создания (создается автоматически)
+    - author: автор комментария (создается автоматически)"""
     text = models.TextField(verbose_name='text')
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE, verbose_name='ad')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='time_created_comment')

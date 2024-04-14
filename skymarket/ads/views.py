@@ -14,8 +14,8 @@ class AdPagination(pagination.PageNumberPagination):
     page_size_query_param = 'pages'
 
 
-# TODO view функции. Предлагаем Вам следующую структуру - но Вы всегда можете использовать свою
 class AdViewSet(viewsets.ModelViewSet):
+    """Контроллер для объявлений"""
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
     pagination_class = AdPagination
@@ -23,9 +23,11 @@ class AdViewSet(viewsets.ModelViewSet):
     search_fields = ['title']
 
     def perform_create(self, serializer):
+        """Авторизовананный пользователь присваивается как автор к объявлению"""
         serializer.save(author=self.request.user)
 
     def get_permissions(self):
+        """Метод для распределения прав доступа в зависимости от действия пользователя"""
         if self.action in ['update', 'partial_update', 'create', 'destroy']:
             self.permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
         elif self.action in ['list', 'retrieve']:
@@ -35,6 +37,7 @@ class AdViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def get_me_ads(self, request):
+        """Отдельный экшен для вывода всех созданных объявлений пользователя"""
         if request.user.is_authenticated:
             queryset = Ad.objects.filter(author=self.request.user).order_by('-id')
             serializer = AdSerializer(queryset, many=True)
@@ -44,18 +47,22 @@ class AdViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    """Контроллер для комментариев"""
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = AdPagination
 
     def perform_create(self, serializer):
+        """Метод для создания комментария к конкретному объявлению.
+        Пользователь и идентификатор объявления заполняются автоматически"""
         ad_id = self.kwargs['ad_id']
         ad = Ad.objects.get(id=ad_id)
         comment = serializer.save(author=self.request.user, ad=ad)
         comment.save()
 
     def list(self, request, *args, **kwargs):
+        """Метод для вывода списка комментариев к конкретному объявлению"""
 
         ad_pk = self.kwargs.get('ad_id')
         queryset = self.queryset.filter(ad=ad_pk)
@@ -63,6 +70,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         return self.get_paginated_response(self.paginate_queryset(serializer.data))
 
     def get_permissions(self):
+        """Метод для распределения прав доступа в зависимости от действия пользователя"""
         if self.action in ['update', 'partial_update', 'destroy']:
             self.permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
         elif self.action in ['create', 'retrieve']:
@@ -72,6 +80,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         return [permission() for permission in self.permission_classes]
 
     def get_queryset(self):
+        """Метод переопределения запроса. Вобор комментариев для конкретного объявления"""
         ad_pk = self.kwargs['ad_id']
         queryset = self.queryset.filter(ad_id=ad_pk)
         return queryset

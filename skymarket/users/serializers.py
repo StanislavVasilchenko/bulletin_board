@@ -10,12 +10,14 @@ User = get_user_model()
 
 
 class UserRegistrationSerializer(BaseUserRegistrationSerializer):
+    """Сериализотор для регистрации пользователя"""
     class Meta(BaseUserRegistrationSerializer.Meta):
         model = User
         fields = ('first_name', 'last_name', 'email', 'phone', 'password')
 
 
 class CurrentUserSerializer(serializers.ModelSerializer):
+    """Сериализотор для пользователя"""
     password = serializers.CharField(write_only=True)
 
     class Meta:

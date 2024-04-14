@@ -7,14 +7,13 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UserRoles(TextChoices):
-    # TODO закончите enum-класс для пользователя
+    """enum-класс для пользователя"""
     ADMIN = 'admin', _('Admin')
     USER = 'user', _('User')
 
 
 class User(AbstractBaseUser):
-    # TODO переопределение пользователя.
-    # TODO подробности также можно поискать в рекоммендациях к проекту
+    """Модель пользоватеоля (Djoser)"""
     objects = UserManager()
 
     username = None

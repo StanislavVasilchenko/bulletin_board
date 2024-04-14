@@ -7,7 +7,7 @@ from ads.models import Comment
 # TODO Сериалайзеры. Предлагаем Вам такую структуру, однако вы вправе использовать свою
 
 class CommentSerializer(serializers.ModelSerializer):
-    # TODO сериалайзер для модели
+    """Сериаоизатор для моденли комментария"""
     ads = serializers.CharField(source='ad.title', read_only=True)
     author_first_name = serializers.CharField(source='author.first_name', read_only=True)
     author_last_name = serializers.CharField(source='author.last_name', read_only=True)
@@ -20,7 +20,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class AdSerializer(serializers.ModelSerializer):
-    # TODO сериалайзер для модели
+    """Сериализатор для модели объявления (развернутая форма)"""
     phone = serializers.CharField(source='author.phone', read_only=True)
     author_first_name = serializers.CharField(source='author.first_name', read_only=True)
     author_last_name = serializers.CharField(source='author.last_name', read_only=True)
@@ -32,7 +32,7 @@ class AdSerializer(serializers.ModelSerializer):
 
 
 class AdDetailSerializer(serializers.ModelSerializer):
-    # TODO сериалайзер для модели
+    """Сериалиатор для моделя объявления (краткая форма)"""
 
     class Meta:
         model = Ad
